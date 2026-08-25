@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  scim:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./scim.db:/app/scim.db
+    restart: unless-stopped
