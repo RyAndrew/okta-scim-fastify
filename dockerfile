@@ -7,7 +7,6 @@ RUN npm install --production
 
 COPY . .
 
-RUN npx knex migrate:latest
-
+ENV PORT=8011
 EXPOSE 8011
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "npx knex migrate:latest && node server.js"]

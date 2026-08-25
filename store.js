@@ -1,11 +1,7 @@
 import knexInit from 'knex';
+import knexConfig from './knexfile.js';
 
-const knex = knexInit({
-  client: 'sqlite3',
-  connection: { filename: './scim.db' },
-  useNullAsDefault: true,
-  migrations: { directory: './migrations' }
-});
+const knex = knexInit(knexConfig);
 
 const parseRaw = rows => rows.map(r => JSON.parse(r.raw));
 

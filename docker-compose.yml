@@ -1,10 +1,20 @@
-version: "3.9"
-
 services:
-  scim:
+  okta-scim-fastify:
+    container_name: okta-scim-fastify
     build: .
+    env_file:
+      - .env
     ports:
-      - "3000:3000"
+      - "${PORT:-8011}:${PORT:-8011}"
     volumes:
-      - ./scim.db:/app/scim.db
+      - ./data:/app/data
     restart: unless-stopped
+    networks:
+      - haproxy
+
+networks:
+  haproxy:
+    external: true
+
+
+
