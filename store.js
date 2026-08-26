@@ -96,5 +96,9 @@ export default {
       await knex('group_members').where({ groupId: id }).delete();
       await knex('groups').where({ id }).delete();
     }
+  },
+
+  requestLog: {
+    create: entry => knex('request_log').insert(entry)
   }
 };

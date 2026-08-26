@@ -4,9 +4,12 @@ import store from './store.js';
 import adapterFactory from './adapter.js';
 import scimPlugin from './fastify-scim.js';
 import { authMiddleware } from './auth-middleware.js';
+import { registerRequestLogging } from './request-logging.js';
 
 const app = fastify({ logger: true });
 const adapter = adapterFactory(store);
+
+registerRequestLogging(app, store);
 
 // Apply auth to all SCIM routes
 app.addHook('preHandler', authMiddleware);
