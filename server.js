@@ -1,3 +1,4 @@
+import './check-config.js';
 import fastify from 'fastify';
 import store from './store.js';
 import adapterFactory from './adapter.js';

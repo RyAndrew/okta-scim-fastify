@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config()
-
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 
 const ISSUER = process.env.OAUTH_ISSUER;

@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "node --env-file=.env server.js",
     "migrate": "knex migrate:latest"
   },
   "dependencies": {
-    "dotenv": "^17.2.3",
     "fastify": "^4.26.0",
     "fastify-plugin": "^4.5.0",
     "jose": "^6.1.3",
