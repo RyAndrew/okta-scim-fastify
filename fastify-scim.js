@@ -1,11 +1,6 @@
 import fp from 'fastify-plugin';
 import { serviceProviderConfig, resourceTypes, schemas } from './scim-config.js';
-
-const scimError = (status, detail) => ({
-  schemas: ['urn:ietf:params:scim:api:messages:2.0:Error'],
-  status: String(status),
-  detail
-});
+import { scimError } from './scim-errors.js';
 
 export default fp((f, { basePath = '/scim/v2', adapter }, done) => {
   const U = `${basePath}/Users`;
@@ -50,7 +45,16 @@ export default fp((f, { basePath = '/scim/v2', adapter }, done) => {
 
   // Users
   f.get(U, async (req, r) => r.send(wrapList(await adapter.listUsers(req))));
-  f.post(U, async (req, r) => r.code(201).send(await adapter.createUser(req.body)));
+  f.post(U, async (req, r) => {
+    try {
+      r.code(201).send(await adapter.createUser(req.body));
+    } catch (err) {
+      if (err.code === 'SQLITE_CONSTRAINT') {
+        return r.code(409).send(scimError(409, 'User already exists'));
+      }
+      throw err;
+    }
+  });
   f.get(`${U}/:id`, async (req, r) => {
     const u = await adapter.getUser(req.params.id);
     if (!u) return r.code(404).send(scimError(404, 'User not found'));

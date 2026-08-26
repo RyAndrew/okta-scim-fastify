@@ -1,10 +1,11 @@
 import { validateAccessToken } from './auth.js';
+import { scimError } from './scim-errors.js';
 
 export async function authMiddleware(req, reply) {
   const header = req.headers.authorization;
 
   if (!header || !header.startsWith('Bearer ')) {
-    reply.code(401).send({ error: 'missing_token' });
+    reply.code(401).send(scimError(401, 'missing_token'));
     return;
   }
 
@@ -13,6 +14,6 @@ export async function authMiddleware(req, reply) {
   try {
     req.user = await validateAccessToken(token);
   } catch {
-    reply.code(401).send({ error: 'invalid_token' });
+    reply.code(401).send(scimError(401, 'invalid_token'));
   }
 }
